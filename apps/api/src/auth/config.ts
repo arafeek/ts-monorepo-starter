@@ -26,3 +26,5 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL!,
   trustedOrigins: [process.env.CORS_ORIGIN!],
 });
+
+export type AuthSession = typeof auth.$Infer.Session;

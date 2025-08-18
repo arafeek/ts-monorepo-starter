@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/node.json",
+  "extends": "../../packages/typescript-config/node.json",
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
@@ -11,11 +11,6 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

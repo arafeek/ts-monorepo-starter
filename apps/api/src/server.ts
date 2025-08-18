@@ -1,13 +1,14 @@
 import 'reflect-metadata';
 
-import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import env from '@fastify/env';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
-import env from '@fastify/env';
+import Fastify from 'fastify';
 
-import { createApolloServer } from './graphql/server';
 import { authRoutes } from './auth/routes';
+import { config } from './config';
+import { createApolloServer } from './graphql/server';
 
 const envSchema = {
   type: 'object',
@@ -60,8 +61,9 @@ async function createServer() {
   });
 
   await server.register(cors, {
-    origin: server.config.CORS_ORIGIN,
+    origin: config.CORS_ORIGINS,
     credentials: true,
+    methods: ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE'],
   });
 
   await server.register(rateLimit, {
@@ -78,11 +80,12 @@ async function createServer() {
   await server.register(authRoutes, { prefix: '/auth' });
 
   // Register GraphQL server
-  const apolloServer = await createApolloServer();
-  await server.register(apolloServer.createHandler({
-    cors: false,
-    path: '/graphql',
-  }));
+  const { plugin, pluginOptions } = await createApolloServer(server);
+  await server.register(plugin, {
+    context: pluginOptions.context,
+    path: pluginOptions.path,
+    method: pluginOptions.method,
+  });
 
   return server;
 }
@@ -90,10 +93,10 @@ async function createServer() {
 async function start() {
   try {
     const server = await createServer();
-    const port = parseInt(server.config.PORT, 10);
-    
+    const port = config.PORT;
+
     await server.listen({ port, host: '0.0.0.0' });
-    
+
     server.log.info(`🚀 Server ready at http://localhost:${port}`);
     server.log.info(`🚀 GraphQL endpoint: http://localhost:${port}/graphql`);
   } catch (err) {

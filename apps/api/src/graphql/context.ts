@@ -1,4 +1,5 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { fromNodeHeaders } from 'better-auth/node';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { auth } from '../auth/config';
 import { db } from '../db';
@@ -28,12 +29,12 @@ export async function createContext({
 
   try {
     const result = await auth.api.getSession({
-      headers: request.headers as HeadersInit,
+      headers: fromNodeHeaders(request.headers),
     });
 
-    if (result.data?.user && result.data?.session) {
-      context.user = result.data.user;
-      context.session = result.data.session;
+    if (result?.user && result.session) {
+      context.user = result.user;
+      context.session = result.session;
     }
   } catch (error) {
     // Ignore auth errors in context creation

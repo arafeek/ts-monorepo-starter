@@ -1,8 +1,8 @@
-import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
+import { Arg, Ctx, Mutation, Resolver } from 'type-graphql';
 
-import { AuthSession, SignUpInput, SignInInput } from '../types/Auth';
-import { Context } from '../context';
 import { auth } from '../../auth/config';
+import { Context } from '../context';
+import { AuthSession, SignInInput, SignUpInput } from '../types/Auth';
 
 @Resolver()
 export class AuthResolver {
@@ -20,16 +20,18 @@ export class AuthResolver {
         },
       });
 
-      if (result.error || !result.data) {
-        throw new Error(result.error?.message || 'Sign up failed');
+      if (result.token && result.user) {
+        return {
+          user: result.user,
+          sessionToken: result.token,
+        };
+      } else {
+        throw new Error('Sign up failed');
       }
-
-      return {
-        user: result.data.user,
-        sessionToken: result.data.session.token,
-      };
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Sign up failed');
+      throw new Error(
+        error instanceof Error ? error.message : 'Sign up failed'
+      );
     }
   }
 
@@ -46,27 +48,14 @@ export class AuthResolver {
         },
       });
 
-      if (result.error || !result.data) {
-        throw new Error(result.error?.message || 'Sign in failed');
-      }
-
       return {
-        user: result.data.user,
-        sessionToken: result.data.session.token,
+        user: result.user,
+        sessionToken: result.token,
       };
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Sign in failed');
-    }
-  }
-
-  @Mutation(() => Boolean)
-  async signOut(@Ctx() ctx: Context): Promise<boolean> {
-    try {
-      const result = await auth.api.signOut({});
-
-      return !result.error;
-    } catch (error) {
-      return false;
+      throw new Error(
+        error instanceof Error ? error.message : 'Sign in failed'
+      );
     }
   }
 }

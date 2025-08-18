@@ -1,32 +1,32 @@
-import { ObjectType, Field, InputType } from 'type-graphql';
+import { Field, InputType, ObjectType } from 'type-graphql';
 import { User } from './User';
 
 @ObjectType()
 export class AuthSession {
   @Field(() => User)
-  user: User;
+  user!: User;
 
   @Field()
-  sessionToken: string;
+  sessionToken!: string;
 }
 
 @InputType()
 export class SignUpInput {
   @Field()
-  email: string;
+  email!: string;
 
   @Field()
-  password: string;
+  password!: string;
 
   @Field()
-  name: string;
+  name!: string;
 }
 
 @InputType()
 export class SignInInput {
   @Field()
-  email: string;
+  email!: string;
 
   @Field()
-  password: string;
+  password!: string;
 }

@@ -1,14 +1,16 @@
 import { ApolloServer } from '@apollo/server';
-import { buildSchema } from 'type-graphql';
-import fastifyApollo, { 
+import fastifyApollo, {
   fastifyApolloDrainPlugin,
 } from '@as-integrations/fastify';
+import type { FastifyInstance } from 'fastify';
+import { buildSchema } from 'type-graphql';
 
-import { UserResolver } from './resolvers/UserResolver';
-import { AuthResolver } from './resolvers/AuthResolver';
+import { ValueOrArray } from 'drizzle-orm';
 import { createContext } from './context';
+import { AuthResolver } from './resolvers/AuthResolver';
+import { UserResolver } from './resolvers/UserResolver';
 
-export async function createApolloServer() {
+export async function createApolloServer(fastify: FastifyInstance) {
   const schema = await buildSchema({
     resolvers: [UserResolver, AuthResolver],
     validate: false,
@@ -16,17 +18,21 @@ export async function createApolloServer() {
 
   const server = new ApolloServer({
     schema,
-    plugins: [fastifyApolloDrainPlugin()],
+    plugins: [fastifyApolloDrainPlugin(fastify)],
     introspection: process.env.NODE_ENV !== 'production',
   });
 
   await server.start();
 
   return {
-    createHandler: (options: { cors: boolean; path: string }) =>
-      fastifyApollo(server, {
-        context: createContext,
-        ...options,
-      }),
+    server,
+    plugin: fastifyApollo(server),
+    pluginOptions: {
+      context: createContext,
+      path: '/graphql',
+      method: ['GET', 'POST', 'OPTIONS'] as ValueOrArray<
+        'GET' | 'POST' | 'OPTIONS'
+      >,
+    },
   };
 }
