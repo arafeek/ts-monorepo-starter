@@ -14,6 +14,10 @@ export async function createApolloServer(fastify: FastifyInstance) {
   const schema = await buildSchema({
     resolvers: [UserResolver, AuthResolver],
     validate: false,
+    authChecker: ({ context }) => {
+      // Simple auth checker - you can implement your auth logic here
+      return !!context.user;
+    },
   });
 
   const server = new ApolloServer({
