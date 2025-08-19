@@ -27,7 +27,7 @@
     "@fastify/helmet": "^13.0.1",
     "@fastify/rate-limit": "^10.3.0",
     "bcryptjs": "^2.4.3",
-    "better-auth": "^1.3.5",
+    "better-auth": "^1.3.7",
     "class-validator": "^0.14.1",
     "dotenv": "^17.2.1",
     "drizzle-orm": "^0.44.4",
