@@ -1,5 +1,5 @@
-import { useAuth } from '~/lib/auth';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card';
+import { useAuth } from '@/lib/auth';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function DashboardPage() {
   const { user } = useAuth();

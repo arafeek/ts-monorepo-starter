@@ -1,8 +1,8 @@
-import { useAuth } from '~/lib/auth';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card';
-import { Label } from '~/components/ui/label';
-import { Input } from '~/components/ui/input';
-import { Button } from '~/components/ui/button';
+import { useAuth } from '@/lib/auth';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 export function ProfilePage() {
   const { user } = useAuth();
