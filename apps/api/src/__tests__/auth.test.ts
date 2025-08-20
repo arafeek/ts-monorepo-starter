@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { createServer } from '@/server';
 import { FastifyInstance } from 'fastify';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { createServer } from '../server';
 
 describe('Authentication', () => {
   let server: FastifyInstance;
@@ -29,7 +29,7 @@ describe('Authentication', () => {
   it('should handle signup request', async () => {
     const response = await server.inject({
       method: 'POST',
-      url: '/auth/signup',
+      url: '/auth/sign-up/email',
       payload: {
         email: 'test@example.com',
         password: 'password123',
@@ -44,7 +44,7 @@ describe('Authentication', () => {
   it('should handle signin request', async () => {
     const response = await server.inject({
       method: 'POST',
-      url: '/auth/signin',
+      url: '/auth/auth/sign-in/email',
       payload: {
         email: 'test@example.com',
         password: 'password123',

@@ -28,8 +28,6 @@ async function createServer() {
     contentSecurityPolicy: false,
   });
 
-  console.log('CONFIG: ', config);
-
   await server.register(cors, {
     origin: config.CORS_ORIGINS,
     credentials: true,
@@ -47,7 +45,7 @@ async function createServer() {
   });
 
   // Register auth routes
-  await server.register(authRoutes, { prefix: '/auth' });
+  await server.register(authRoutes);
 
   // Register GraphQL server
   const { plugin, pluginOptions } = await createApolloServer(server);

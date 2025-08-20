@@ -5,7 +5,7 @@ import { auth } from './config';
 export async function authRoutes(fastify: FastifyInstance) {
   fastify.route({
     method: ['GET', 'POST'],
-    url: '/api/auth/*',
+    url: '/auth/*',
     async handler(request, reply) {
       try {
         const url = new URL(request.url, `http://${request.headers.host}`);
