@@ -1,8 +1,8 @@
 import { fromNodeHeaders } from 'better-auth/node';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { auth } from '../auth/config';
-import { db } from '../db';
+import { auth } from '@/auth/config';
+import { db } from '@/db';
 
 export interface Context {
   db: typeof db;

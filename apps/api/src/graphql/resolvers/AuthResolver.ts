@@ -1,6 +1,6 @@
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql';
 
-import { auth } from '../../auth/config';
+import { auth } from '@/auth/config';
 import { Context } from '../context';
 import { AuthSession, SignInInput, SignUpInput } from '../types/Auth';
 

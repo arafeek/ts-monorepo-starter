@@ -6,9 +6,9 @@ import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 import Fastify from 'fastify';
 
-import { authRoutes } from './auth/routes';
-import { config } from './config';
-import { createApolloServer } from './graphql/server';
+import { authRoutes } from '@/auth/routes';
+import { config } from '@/config';
+import { createApolloServer } from '@/graphql/server';
 
 async function createServer() {
   const server = Fastify({

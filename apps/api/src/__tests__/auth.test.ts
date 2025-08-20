@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { createServer } from '../server';
+import { createServer } from '@/server';
 import { FastifyInstance } from 'fastify';
 
 describe('Authentication', () => {

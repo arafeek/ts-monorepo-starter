@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 
 import { User } from '../types/User';
 import { Context } from '../context';
-import { users } from '../../db/schema';
+import { users } from '@/db/schema';
 
 @Resolver(User)
 export class UserResolver {
