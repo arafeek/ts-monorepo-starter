@@ -15,6 +15,7 @@ export const auth = betterAuth({
       verification: schema.verifications,
     },
   }),
+  basePath: '/auth',
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false,
