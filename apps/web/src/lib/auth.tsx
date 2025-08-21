@@ -1,94 +1,58 @@
-import React, { createContext, useContext, useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { createAuthClient } from 'better-auth/react';
+import React, { createContext, useContext } from 'react';
 
-import { apiClient, type User, type AuthResponse, type SignUpData, type SignInData } from './api';
+import type { SignInData, SignUpData } from './api';
+
+const authClient = createAuthClient({
+  baseURL: import.meta.env.VITE_AUTH_URL,
+});
 
 interface AuthContextType {
-  user: User | null;
+  user: any;
   isLoading: boolean;
   signUp: (data: SignUpData) => Promise<void>;
   signIn: (data: SignInData) => Promise<void>;
   signOut: () => Promise<void>;
   isAuthenticated: boolean;
+  useSession: typeof authClient.useSession;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const queryClient = useQueryClient();
-
-  const { isLoading } = useQuery({
-    queryKey: ['auth', 'session'],
-    queryFn: async () => {
-      try {
-        const response = await apiClient.get<AuthResponse>('/auth/session');
-        setUser(response.data.user);
-        return response.data;
-      } catch (error) {
-        setUser(null);
-        throw error;
-      }
-    },
-    retry: false,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-
-  const signUpMutation = useMutation({
-    mutationFn: async (data: SignUpData) => {
-      const response = await apiClient.post<AuthResponse>('/auth/signup', data);
-      return response.data;
-    },
-    onSuccess: (data) => {
-      setUser(data.user);
-      queryClient.setQueryData(['auth', 'session'], data);
-    },
-  });
-
-  const signInMutation = useMutation({
-    mutationFn: async (data: SignInData) => {
-      const response = await apiClient.post<AuthResponse>('/auth/signin', data);
-      return response.data;
-    },
-    onSuccess: (data) => {
-      setUser(data.user);
-      queryClient.setQueryData(['auth', 'session'], data);
-    },
-  });
-
-  const signOutMutation = useMutation({
-    mutationFn: async () => {
-      await apiClient.post('/auth/signout');
-    },
-    onSuccess: () => {
-      setUser(null);
-      queryClient.clear();
-    },
-  });
+  const { data: session, isPending } = authClient.useSession();
 
   const signUp = async (data: SignUpData) => {
-    await signUpMutation.mutateAsync(data);
+    await authClient.signUp.email({
+      email: data.email,
+      password: data.password,
+      name: data.name,
+    });
   };
 
   const signIn = async (data: SignInData) => {
-    await signInMutation.mutateAsync(data);
+    await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+    });
   };
 
   const signOut = async () => {
-    await signOutMutation.mutateAsync();
+    await authClient.signOut();
   };
 
-  const isAuthenticated = !!user;
+  const isAuthenticated = !!session?.user;
 
   return (
     <AuthContext.Provider
       value={{
-        user,
-        isLoading,
+        user: session?.user || null,
+        isLoading: isPending,
         signUp,
         signIn,
         signOut,
         isAuthenticated,
+        useSession: authClient.useSession,
       }}
     >
       {children}
@@ -103,3 +67,5 @@ export function useAuth() {
   }
   return context;
 }
+
+export { authClient };
