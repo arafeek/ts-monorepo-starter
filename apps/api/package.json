@@ -20,7 +20,7 @@
     "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
-    "@apollo/server": "^4.12.2",
+    "@apollo/server": "^5.0.0",
     "@as-integrations/fastify": "^3.0.0",
     "@fastify/cors": "^11.1.0",
     "@fastify/env": "^5.0.2",
