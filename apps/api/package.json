@@ -46,7 +46,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@swc/core": "^1.13.3",
+    "@swc/core": "^1.13.5",
     "@swc/helpers": "^0.5.17",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
