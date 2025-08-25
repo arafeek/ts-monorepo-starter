@@ -41,7 +41,7 @@
     "type-graphql": "^2.0.0-rc.1",
     "vite-plugin-swc-transform": "^1.1.0",
     "vite-tsconfig-paths": "^5.1.4",
-    "zod": "^3.23.8"
+    "zod": "^4.1.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
